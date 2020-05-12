@@ -52,7 +52,8 @@ class Graph:
                 visited.add(v)
                 for next_vert in self.get_neighbors(v):
                     q.enqueue(next_vert)
-        print(visited)
+        # print('bft', visited)
+        return visited
 
     def dft(self, starting_vertex):
         """
@@ -158,6 +159,24 @@ class Graph:
         path = []
         visited = set()
 
+        def dfs_helper(start, end, visited, path):
+
+            visited.add(start)
+            path = path + [start]
+            
+            if start == end:
+                return path
+
+            for neighbor in self.get_neighbors(start):
+                if neighbor not in visited:
+                    new_path = dfs_helper(neighbor, destination_vertex, visited, path)
+                    if new_path is not None:
+                        return new_path
+            return None
+
+        return dfs_helper(starting_vertex, destination_vertex, visited, path)
+        # return path
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
@@ -217,12 +236,12 @@ if __name__ == '__main__':
     Valid BFS path:
         [1, 2, 4, 6]
     '''
-    print(graph.bfs(1, 6))
+    print('bfs', graph.bfs(1, 6))
 
     '''
     Valid DFS paths:
         [1, 2, 4, 6]
         [1, 2, 4, 7, 6]
     '''
-    print(graph.dfs(1, 6))
-    print(graph.dfs_recursive(1, 6))
+    print('dfs ',graph.dfs(1, 6))
+    print('dfs rec ', graph.dfs_recursive(1, 6))
